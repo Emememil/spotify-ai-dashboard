@@ -18,17 +18,21 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (status === 'unauthenticated') redirect('/');
-    if (status === 'authenticated') {
+    if (status === 'unauthenticated') {
+      redirect('/');
+    }
+
+    if (status === 'authenticated' && session?.user?.accessToken) {
       const fetchData = async () => {
         try {
           spotifyApi.setAccessToken(session.user.accessToken!);
+
           const [userProfileRes, topArtistsRes, topTracksRes] = await Promise.all([
             spotifyApi.getMe(),
-            // --- THE FINAL CHANGE: Limit set to 5 ---
-            spotifyApi.getMyTopArtists({ time_range: 'medium_term', limit: 5 }),
-            spotifyApi.getMyTopTracks({ time_range: 'medium_term', limit: 5 }),
+            spotifyApi.getMyTopArtists({ time_range: 'medium_term', limit: 20 }),
+            spotifyApi.getMyTopTracks({ time_range: 'medium_term', limit: 20 }),
           ]);
+          
           setUserProfile(userProfileRes.body as SpotifyUser);
           setTopArtists(topArtistsRes.body?.items || []);
           setTopTracks(topTracksRes.body?.items || []);
@@ -79,7 +83,7 @@ export default function DashboardPage() {
             Your Music, <span className="text-spotify-green">Visualized</span>
           </h1>
           <p className="text-spotify-text-gray text-lg">
-            Go beyond the algorithm. Uncover the unique narrative of your sound.
+            Discover deep insights about your listening habits
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
