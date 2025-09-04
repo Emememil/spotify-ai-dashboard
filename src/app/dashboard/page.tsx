@@ -25,7 +25,7 @@ export default function DashboardPage() {
     if (status === 'authenticated' && session?.user?.accessToken) {
       const fetchData = async () => {
         try {
-          // THIS IS THE CORRECTED LINE:
+          // The non-null assertion (!) here is the definitive fix.
           spotifyApi.setAccessToken(session.user.accessToken!);
 
           const [userProfileRes, topArtistsRes, topTracksRes] = await Promise.all([
