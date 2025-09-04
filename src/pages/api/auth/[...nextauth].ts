@@ -34,15 +34,16 @@ export const authOptions: AuthOptions = {
       clientId: process.env.SPOTIFY_CLIENT_ID as string,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET as string,
       authorization: LOGIN_URL,
+      // This uses a more modern and secure authorization flow.
+      checks: ["pkce"],
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: '/' // <-- THIS IS THE CORRECTED LINE
+    signIn: '/'
   },
   callbacks: {
     async jwt({ token, account, user }) {
-      
       // Initial sign in
       if (account && user) {
         return {
@@ -53,12 +54,10 @@ export const authOptions: AuthOptions = {
           accessTokenExpires: account.expires_at! * 1000,
         };
       }
-
       // Return previous token if the access token has not expired yet
       if (Date.now() < (token.accessTokenExpires as number)) {
         return token;
       }
-      
       // Access token has expired, so we need to refresh it...
       return await refreshAccessToken(token);
     },
@@ -67,7 +66,6 @@ export const authOptions: AuthOptions = {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
       session.user.username = token.username;
-
       return session;
     }
   },

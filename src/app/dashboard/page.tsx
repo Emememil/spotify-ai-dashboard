@@ -5,7 +5,7 @@ import UserProfile from "@/components/UserProfile";
 import TopItems from "@/components/TopItems";
 import AIAnalysis from "@/components/AIAnalysis";
 import { SpotifyArtist, SpotifyTrack, SpotifyUser } from "@/types/spotify";
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
@@ -25,12 +25,12 @@ export default function DashboardPage() {
     if (status === 'authenticated' && session?.user?.accessToken) {
       const fetchData = async () => {
         try {
-          spotifyApi.setAccessToken(session.user.accessToken!);
+          spotifyApi.setAccessToken(session.user.accessToken);
 
           const [userProfileRes, topArtistsRes, topTracksRes] = await Promise.all([
             spotifyApi.getMe(),
-            spotifyApi.getMyTopArtists({ time_range: 'medium_term', limit: 20 }),
-            spotifyApi.getMyTopTracks({ time_range: 'medium_term', limit: 20 }),
+            spotifyApi.getMyTopArtists({ time_range: 'medium_term', limit: 5 }),
+            spotifyApi.getMyTopTracks({ time_range: 'medium_term', limit: 5 }),
           ]);
           
           setUserProfile(userProfileRes.body as SpotifyUser);
@@ -38,6 +38,7 @@ export default function DashboardPage() {
           setTopTracks(topTracksRes.body?.items || []);
         } catch (error) { 
           console.error('Error fetching data:', error);
+          signOut();
         }
       };
       fetchData();
@@ -83,7 +84,7 @@ export default function DashboardPage() {
             Your Music, <span className="text-spotify-green">Visualized</span>
           </h1>
           <p className="text-spotify-text-gray text-lg">
-            Discover deep insights about your listening habits
+            Go beyond the algorithm. Uncover the unique narrative of your sound.
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

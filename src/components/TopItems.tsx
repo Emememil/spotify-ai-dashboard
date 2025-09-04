@@ -3,8 +3,6 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { SpotifyArtist, SpotifyTrack } from '@/types/spotify'
 
-// Note: No longer need useState
-
 interface TopItemsProps {
   title: string
   items: SpotifyArtist[] | SpotifyTrack[]
@@ -40,7 +38,6 @@ export default function TopItems({ title, items, type }: TopItemsProps) {
         <span className="text-spotify-white">{title}</span>
       </h3>
       
-      {/* Simplified list container with no scrolling */}
       <div className="space-y-1">
         {(items || []).map((item, index) => {
           const isArtist = type === 'artists';
@@ -48,9 +45,9 @@ export default function TopItems({ title, items, type }: TopItemsProps) {
           const track = !isArtist ? item as SpotifyTrack : null;
           
           let imageUrl: string | undefined;
-          if (isArtist) {
+          if (isArtist && artist.images) {
               imageUrl = artist.images?.[0]?.url;
-          } else if (track) {
+          } else if (track && track.album?.images) {
               imageUrl = track.album?.images?.[0]?.url;
           }
 
@@ -83,7 +80,7 @@ export default function TopItems({ title, items, type }: TopItemsProps) {
                 <div className="text-spotify-white text-sm font-medium truncate group-hover:text-spotify-green transition-colors duration-200">
                   {item.name}
                 </div>
-                {track && (
+                {track && track.artists && (
                   <div className="text-spotify-text-gray text-xs truncate mt-0.5">
                     {track.artists.map(a => a.name).join(', ')}
                   </div>
