@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  
+
   const [userProfile, setUserProfile] = useState<SpotifyUser | null>(null);
   const [topArtists, setTopArtists] = useState<SpotifyArtist[]>([]);
   const [topTracks, setTopTracks] = useState<SpotifyTrack[]>([]);
@@ -25,14 +25,15 @@ export default function DashboardPage() {
     if (status === 'authenticated' && session?.user?.accessToken) {
       const fetchData = async () => {
         try {
-          spotifyApi.setAccessToken(session.user.accessToken);
+          // THIS IS THE CORRECTED LINE:
+          spotifyApi.setAccessToken(session.user.accessToken!);
 
           const [userProfileRes, topArtistsRes, topTracksRes] = await Promise.all([
             spotifyApi.getMe(),
             spotifyApi.getMyTopArtists({ time_range: 'medium_term', limit: 5 }),
             spotifyApi.getMyTopTracks({ time_range: 'medium_term', limit: 5 }),
           ]);
-          
+
           setUserProfile(userProfileRes.body as SpotifyUser);
           setTopArtists(topArtistsRes.body?.items || []);
           setTopTracks(topTracksRes.body?.items || []);
@@ -49,14 +50,14 @@ export default function DashboardPage() {
     setIsLoading(true);
     setAnalysis('');
     const artistNames = topArtists.map(artist => artist.name);
-    
+
     try {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topArtists: artistNames }),
       });
-      
+
       if (!response.ok) throw new Error('API request failed');
       const data = await response.json();
       setAnalysis(data.analysis);
@@ -109,4 +110,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
