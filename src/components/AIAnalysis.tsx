@@ -86,7 +86,9 @@ export default function AIAnalysis({ analysis, isLoading, onAnalyze }: AIAnalysi
                   >
                     <SparkleIcon />
                   </motion.div>
-                  Analyze My Music Taste
+                  {/* --- THIS IS THE RESPONSIVE TEXT --- */}
+                  <span className="hidden sm:inline">Analyze My Music Taste</span>
+                  <span className="sm:hidden">Analyze My Taste</span>
                 </span>
               </motion.button>
             </motion.div>
@@ -149,4 +151,3 @@ export default function AIAnalysis({ analysis, isLoading, onAnalyze }: AIAnalysi
     </motion.div>
   )
 }
-
