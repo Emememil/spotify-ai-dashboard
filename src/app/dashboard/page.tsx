@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-
+    
   const [userProfile, setUserProfile] = useState<SpotifyUser | null>(null);
   const [topArtists, setTopArtists] = useState<SpotifyArtist[]>([]);
   const [topTracks, setTopTracks] = useState<SpotifyTrack[]>([]);
@@ -21,24 +21,21 @@ export default function DashboardPage() {
     if (status === 'unauthenticated') {
       redirect('/');
     }
-
     if (status === 'authenticated' && session?.user?.accessToken) {
       const fetchData = async () => {
         try {
-          // The non-null assertion (!) here is the definitive fix.
           spotifyApi.setAccessToken(session.user.accessToken!);
-
           const [userProfileRes, topArtistsRes, topTracksRes] = await Promise.all([
             spotifyApi.getMe(),
             spotifyApi.getMyTopArtists({ time_range: 'medium_term', limit: 5 }),
             spotifyApi.getMyTopTracks({ time_range: 'medium_term', limit: 5 }),
           ]);
-
+                    
           setUserProfile(userProfileRes.body as SpotifyUser);
           setTopArtists(topArtistsRes.body?.items || []);
           setTopTracks(topTracksRes.body?.items || []);
         } catch (error) { 
-          console.error('Error fetching data:', error);
+           console.error('Error fetching data:', error);
           signOut();
         }
       };
@@ -50,14 +47,14 @@ export default function DashboardPage() {
     setIsLoading(true);
     setAnalysis('');
     const artistNames = topArtists.map(artist => artist.name);
-
+        
     try {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topArtists: artistNames }),
       });
-
+            
       if (!response.ok) throw new Error('API request failed');
       const data = await response.json();
       setAnalysis(data.analysis);
@@ -78,27 +75,38 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-spotify-gradient p-6 text-spotify-white">
+    <div className="min-h-screen bg-spotify-gradient p-4 md:p-6 text-spotify-white">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-spotify-white mb-2">
+        {/* Header */}
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-spotify-white mb-2">
             Your Music, <span className="text-spotify-green">Visualized</span>
           </h1>
-          <p className="text-spotify-text-gray text-lg">
+          <p className="text-spotify-text-gray text-base md:text-lg">
             Go beyond the algorithm. Uncover the unique narrative of your sound.
           </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-4">
+
+        {/* --- REFACTORED RESPONSIVE GRID --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
+          
+          {/* User Profile: Full width on mobile, full width on tablet, 4 cols on desktop */}
+          <div className="md:col-span-2 lg:col-span-4">
             <UserProfile user={userProfile} />
           </div>
-          <div className="lg:col-span-4">
+
+          {/* Top Artists: Full width on mobile, half width on tablet, 4 cols on desktop */}
+          <div className="md:col-span-1 lg:col-span-4">
             <TopItems title="Top Artists" items={topArtists} type="artists" />
           </div>
-          <div className="lg:col-span-4">
+
+          {/* Top Tracks: Full width on mobile, half width on tablet, 4 cols on desktop */}
+          <div className="md:col-span-1 lg:col-span-4">
             <TopItems title="Top Tracks" items={topTracks} type="tracks" />
           </div>
-          <div className="lg:col-span-12">
+
+          {/* AI Analysis: Full width on mobile, full width on tablet, 12 cols on desktop */}
+          <div className="md:col-span-2 lg:col-span-12">
             <AIAnalysis
               analysis={analysis}
               isLoading={isLoading}
