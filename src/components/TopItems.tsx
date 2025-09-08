@@ -37,17 +37,18 @@ export default function TopItems({ title, items, type }: TopItemsProps) {
         {type === 'artists' ? <ArtistIcon /> : <TrackIcon />}
         <span className="text-spotify-white">{title}</span>
       </h3>
-      
+
       <div className="space-y-1">
         {(items || []).map((item, index) => {
           const isArtist = type === 'artists';
           const artist = isArtist ? item as SpotifyArtist : null;
           const track = !isArtist ? item as SpotifyTrack : null;
-          
+
           let imageUrl: string | undefined;
-          if (isArtist && artist.images) {
+          // THIS IS THE CORRECTED LOGIC BLOCK
+          if (isArtist && artist) {
               imageUrl = artist.images?.[0]?.url;
-          } else if (track && track.album?.images) {
+          } else if (!isArtist && track) {
               imageUrl = track.album?.images?.[0]?.url;
           }
 
@@ -70,12 +71,12 @@ export default function TopItems({ title, items, type }: TopItemsProps) {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                   />
                 ) : (
-                   <div className={`w-12 h-12 bg-spotify-gray-light flex items-center justify-center ${type === 'artists' ? 'rounded-full' : 'rounded-md'}`}>
+                    <div className={`w-12 h-12 bg-spotify-gray-light flex items-center justify-center ${type === 'artists' ? 'rounded-full' : 'rounded-md'}`}>
                     {type === 'artists' ? <ArtistIcon /> : <TrackIcon />}
                   </div>
                 )}
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <div className="text-spotify-white text-sm font-medium truncate group-hover:text-spotify-green transition-colors duration-200">
                   {item.name}
@@ -91,7 +92,7 @@ export default function TopItems({ title, items, type }: TopItemsProps) {
                   </div>
                 )}
               </div>
-              
+
               <div className="flex-shrink-0 text-xs text-spotify-text-gray font-mono opacity-60 group-hover:opacity-100 transition-opacity duration-200">
                 #{(index + 1).toString().padStart(2, '0')}
               </div>
@@ -102,4 +103,3 @@ export default function TopItems({ title, items, type }: TopItemsProps) {
     </motion.div>
   );
 }
-
