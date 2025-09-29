@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Spotify AI Dashboard
 
-## Getting Started
+A full-stack, responsive web application that provides users with a deep analysis of their Spotify listening habits, powered by the OpenAI API.
 
-First, run the development server:
+[**Live Demo**](https://spotify-ai-dashboard.vercel.app/)
+
+![Spotify AI Dashboard](https://i.imgur.com/vH4pX5w.png)
+
+
+## About The Project
+
+This project is a feature-rich dashboard that visualizes a user's Spotify data in a clean, modern interface inspired by the official Spotify web player. It uses the Spotify API for secure user authentication and data retrieval, displaying personalized information like top artists and tracks.
+
+The standout feature is a custom AI music analysis tool. By sending a user's listening data to the OpenAI API (`gpt-4o`), the application generates a sophisticated, beautifully worded narrative of their unique musical taste, offering insights that go beyond simple statistics.
+
+This application was built from the ground up and successfully deployed to Vercel, demonstrating a complete development lifecycle from concept to a live, production-ready product.
+
+---
+
+## Key Features
+
+* **Secure Spotify Authentication:** Full OAuth 2.0 implementation using NextAuth.js for safe and secure user login.
+* **Personalized Data Visualization:** Dynamically fetches and displays the user's profile, top 5 artists, and top 5 tracks.
+* **AI-Powered Music Analysis:** Integrates with the OpenAI API to provide users with a unique, narrative-based summary of their listening habits.
+* **Fully Responsive Design:** A polished and intuitive user interface built with Tailwind CSS that works seamlessly across desktop and mobile devices.
+* **Clean, Type-Safe Codebase:** Built with TypeScript to ensure maintainability and scalability.
+
+---
+
+## Tech Stack
+
+This project was built with a modern, full-stack tech stack:
+
+* **Framework:** [Next.js](https://nextjs.org/)
+* **Language:** [TypeScript](https://www.typescriptlang.org/)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **Authentication:** [NextAuth.js](https://next-auth.js.org/)
+* **Animations:** [Framer Motion](https://www.framer.com/motion/)
+* **AI Integration:** [OpenAI API](https://openai.com/api/)
+* **Spotify Integration:** [Spotify Web API](https://developer.spotify.com/documentation/web-api)
+* **Deployment:** [Vercel](https://vercel.com/)
+
+---
+
+## Setup and Installation
+
+To run this project locally, you will need to create a `.env.local` file in the root of the project and add the following environment variables:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Spotify API Credentials
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=a_long_random_string_for_session_encryption
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# OpenAI API Key
+OPENAI_API_KEY=your_openai_api_key
