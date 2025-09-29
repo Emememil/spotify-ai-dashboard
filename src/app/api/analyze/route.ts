@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: 'llama3-8b-8192',
+      model: 'llama3-70b-8192', // Use the powerful 70b model instead
     });
 
     const analysis = chatCompletion.choices[0]?.message?.content || 'Could not generate analysis.';
@@ -42,7 +42,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ analysis });
 
   } catch (error) {
-    // --- ENHANCED ERROR LOGGING ---
     console.error('--- CRITICAL ERROR IN GROQ ANALYSIS API ---');
     if (error instanceof Groq.APIError) {
       console.error('Groq API Error:', {
