@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: 'llama3.1-70b-versatile',
+      model: 'llama3-8b-8192',
     });
 
     const analysis = chatCompletion.choices[0]?.message?.content || 'Could not generate analysis.';
