@@ -42,8 +42,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ analysis });
 
   } catch (error) {
+    // --- ENHANCED ERROR LOGGING ---
     console.error('--- CRITICAL ERROR IN GROQ ANALYSIS API ---');
-    console.error(error);
+    if (error instanceof Groq.APIError) {
+      console.error('Groq API Error:', {
+        status: error.status,
+        message: error.message,
+        headers: error.headers,
+      });
+    } else {
+      console.error('Generic Error:', error);
+    }
     console.error('-----------------------------------------');
     
     return NextResponse.json({ error: 'Failed to analyze music taste.' }, { status: 500 });
