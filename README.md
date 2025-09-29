@@ -4,7 +4,8 @@ A full-stack, responsive web application that provides users with a deep analysi
 
 [**Live Demo**](https://spotify-ai-dashboard.vercel.app/)
 
-![IMG_20250929_163855](https://github.com/user-attachments/assets/76bfbba9-10be-4814-8db8-d173afcea5d6)
+
+![forgit](https://github.com/user-attachments/assets/5d24a376-eea4-42fe-b43d-e1039fc51f84)
 
 ## About The Project
 
